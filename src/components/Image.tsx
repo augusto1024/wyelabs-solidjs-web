@@ -6,6 +6,7 @@ import { createEffect, createSignal, Show } from 'solid-js';
 
 interface ImageProps {
   url: string | null | undefined;
+  onLoad: () => void;
 }
 
 export const Image = (props: ImageProps): JSX.Element => {
@@ -22,6 +23,7 @@ export const Image = (props: ImageProps): JSX.Element => {
 
   const handleLoad = () => {
     setLoading(false);
+    props.onLoad();
   };
 
   const handleError = () => {

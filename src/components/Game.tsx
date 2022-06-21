@@ -7,11 +7,16 @@ export const Game = (): JSX.Element => {
   const [data, { refetch }] = createResource<Person[]>(fetchPeople);
   const [selectedPerson, setSelectedPerson] = createSignal<Person>();
 
+  const [imageLoaded, setImageLoaded] = createSignal(false);
+
+  const loading = () => data.loading || !imageLoaded();
+
   createEffect(() => {
     const people = data();
 
     if (data.loading || !people) {
       setSelectedPerson(undefined);
+      setImageLoaded(false);
     } else {
       const index = Math.floor(Math.random() * (people.length - 1));
       setSelectedPerson(people[index]);
@@ -23,12 +28,15 @@ export const Game = (): JSX.Element => {
 
   return (
     <div class="game">
-      <Image url={selectedPerson()?.imageUrl} />
+      <Image
+        onLoad={() => setImageLoaded(true)}
+        url={selectedPerson()?.imageUrl}
+      />
       <Options
-        people={data.loading ? [] : (data() as Person[])}
+        people={loading() ? [] : (data() as Person[])}
         onSelection={handlePersonSelection}
       />
-      <button onClick={refetch} disabled={data.loading} class="primary">
+      <button onClick={refetch} disabled={loading()} class="primary">
         Obtener WyeWorker al azar
       </button>
     </div>
