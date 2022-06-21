@@ -1,5 +1,6 @@
-import { Show, For, createSignal } from 'solid-js';
+import { Show, For, createSignal, createEffect } from 'solid-js';
 import { JSX } from 'solid-js/jsx-runtime';
+import globalScore from '../states/score';
 
 interface OptionsProps {
   people: Person[];
@@ -13,9 +14,22 @@ type Selection = {
 
 export const Options = (props: OptionsProps): JSX.Element => {
   const [selection, setSelection] = createSignal<Selection>({ correct: false });
+  const [, setScore] = globalScore;
+
+  createEffect(
+    () =>
+      props.people.length === 0 &&
+      setSelection({ person: undefined, correct: false })
+  );
 
   const handleSelection = (person: Person): void => {
     const correct = props.onSelection(person);
+    if (!selection().person) {
+      setScore((score) => ({
+        total: score.total + 1,
+        correct: correct ? score.correct + 1 : score.correct,
+      }));
+    }
     setSelection({
       person,
       correct,
