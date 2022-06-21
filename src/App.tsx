@@ -1,9 +1,11 @@
 import type { Component } from 'solid-js';
+import { Game, Header } from './components';
 
 const App: Component = () => {
   return (
-    <div class="bg-gray-600 h-full w-full flex items-center justify-center">
-      <h1 class="text-3xl font-bold text-white">Hello world!</h1>
+    <div>
+      <Header />
+      <Game />
     </div>
   );
 };
