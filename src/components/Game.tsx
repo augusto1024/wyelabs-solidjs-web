@@ -23,7 +23,7 @@ export const Game = (): JSX.Element => {
 
   return (
     <div class="game">
-      <Image />
+      <Image url={selectedPerson()?.imageUrl} />
       <Options
         people={data.loading ? [] : (data() as Person[])}
         onSelection={handlePersonSelection}
